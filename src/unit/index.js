@@ -76,7 +76,6 @@ const unit = {
         data = btoa(data)
       }
       window.localStorage.setItem(StorageKey, data)
-      console.log('[tetris] localStorage saved, points:', store.state.points, 'max:', store.state.max, 'cur:', !!store.state.cur, 'reset:', store.state.reset, 'lock:', store.state.lock)
     })
   },
   isMobile() {

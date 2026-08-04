@@ -30,7 +30,6 @@ export default {
   },
   methods: {
     onChange({cur, point, max} ) {
-      console.log('[tetris] Point.onChange called, cur:', !!cur, 'point:', point, 'max:', max)
       clearInterval(Point.timeout)
       if (cur) {
         // 在游戏进行中
@@ -51,7 +50,6 @@ export default {
 
         if (point !== 0) {
           // 如果为上轮没玩, 也不用提示了
-          console.log('[tetris] Point: game over, showing lastRound:', point, 'alternating with max:', max)
           toggle()
         } else {
           this.label=ZDF

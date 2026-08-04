@@ -93,7 +93,6 @@ export default {
       this.render()
     },
     start() {
-      console.log('[tetris] app start() initializing, lastRecord:', !!lastRecord, 'lastRecord.cur:', lastRecord && !!lastRecord.cur, 'lastRecord.pause:', lastRecord && lastRecord.pause, 'lastRecord.points:', lastRecord && lastRecord.points, 'lastRecord.max:', lastRecord && lastRecord.max)
       if (visibilityChangeEvent) {
         // 将页面的焦点变换写入store
         document.addEventListener(
@@ -120,11 +119,9 @@ export default {
         }
 
         if (!lastRecord.cur) {
-          console.log('[tetris] app start: lastRecord.cur is null, calling overStart() (no submit)')
           states.overStart()
         }
       } else {
-        console.log('[tetris] app start: no lastRecord, calling overStart() (no submit)')
         states.overStart()
       }
     }
