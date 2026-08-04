@@ -35,35 +35,10 @@ export default {
 
     // 在鼠标触发mousedown时, 移除元素时可以不触发mouseup, 这里做一个兼容, 以mouseout模拟mouseup
     const mouseDownEventCatch = {}
-    document.addEventListener(
-      'touchstart',
-      e => {
-        if (e.preventDefault) {
-          e.preventDefault()
-        }
-      },
-      true
-    )
-    document.addEventListener('touchend', (e) => {
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
-    }, true);
-
     // 阻止双指放大
     document.addEventListener('gesturestart', (event) => {
       event.preventDefault();
     });
-    
-    document.addEventListener(
-      'mousedown',
-      e => {
-        if (e.preventDefault) {
-          e.preventDefault()
-        }
-      },
-      true
-    )
     Object.keys(todo).forEach(key => {
       this.$refs[`dom_${key}`].$el.addEventListener(
         'mousedown',

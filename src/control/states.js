@@ -193,9 +193,17 @@ const states = {
     store.commit('lock', true)
     store.commit('reset', true)
     store.commit('pause', false)
-    // 提交当前局分数到天梯榜
-    if (window._gpReady && window.GamePlatform && window.GamePlatform.getToken()) {
-      window.GamePlatform.submitScore('tetris', store.state.points).catch(() => {})
+    // 提交当前局分数到天梯榜（带重试：如果 SDK 未就绪，等待最多 5 秒后重试）
+    const finalPoints = store.state.points
+    const trySubmit = (retries) => {
+      if (window._gpReady && window.GamePlatform && window.GamePlatform.getToken()) {
+        window.GamePlatform.submitScore('tetris', finalPoints).catch(() => {})
+      } else if (retries > 0) {
+        setTimeout(() => trySubmit(retries - 1), 1000)
+      }
+    }
+    if (finalPoints > 0) {
+      trySubmit(5)
     }
   },
 

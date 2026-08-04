@@ -20,12 +20,6 @@
     </div>
   </div>
   <a href="https://game-list-arv.pages.dev" class="gp-home-btn" title="主页">🏠</a>
-  <style>
-    .gp-home-btn { position: fixed; top: 12px; right: 12px; z-index: 99999;
-      font-size: 18px; text-decoration: none; opacity: 0.35; transition: opacity 0.15s;
-      -webkit-tap-highlight-color: transparent; pointer-events: auto; }
-    .gp-home-btn:active { opacity: 0.7; }
-  </style>
   <!-- 社交平台 SDK -->
   <script>
     window.__GP_API_BASE__ = new URLSearchParams(location.search).get('api') || 'https://api.w1lkin.site';
@@ -37,7 +31,14 @@
         // 硬登录门：未登录跳转门户页登录
         window.GamePlatform.mountGate({ gameId: 'tetris' }).then(function () {
           window._gpReady = true;
+        }).catch(function () {
+          // 登录门失败时也标记为 ready（允许游客模式玩游戏，分数通过 token 判断）
+          window._gpReady = true;
         });
+      };
+      s.onerror = function () {
+        // SDK 加载失败，标记为 ready 以允许游戏运行
+        window._gpReady = true;
       };
       document.head.appendChild(s);
     })();
