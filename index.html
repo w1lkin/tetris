@@ -20,28 +20,19 @@
     </div>
   </div>
   <a href="https://game-list-arv.pages.dev" class="gp-home-btn" title="主页">🏠</a>
-  <!-- 社交平台 SDK -->
+  <!-- 社交平台 SDK（同步加载，确保 GamePlatform 在游戏逻辑前就绪）-->
   <script>
     window.__GP_API_BASE__ = new URLSearchParams(location.search).get('api') || 'https://api.w1lkin.site';
-    (function () {
-      var s = document.createElement('script');
-      s.src = window.__GP_API_BASE__ + '/sdk.js';
-      s.onload = function () {
-        window.GamePlatform.init();
-        // 硬登录门：未登录跳转门户页登录
-        window.GamePlatform.mountGate({ gameId: 'tetris' }).then(function () {
-          window._gpReady = true;
-        }).catch(function () {
-          // 登录门失败时也标记为 ready（允许游客模式玩游戏，分数通过 token 判断）
-          window._gpReady = true;
-        });
-      };
-      s.onerror = function () {
-        // SDK 加载失败，标记为 ready 以允许游戏运行
-        window._gpReady = true;
-      };
-      document.head.appendChild(s);
-    })();
+    document.write('<script src="' + window.__GP_API_BASE__ + '/sdk.js"><\/script>');
+  </script>
+  <script>
+    window.GamePlatform.init();
+    // 硬登录门：未登录跳转门户页登录
+    window.GamePlatform.mountGate({ gameId: 'tetris' }).then(function () {
+      window._gpReady = true;
+    }).catch(function () {
+      window._gpReady = true;
+    });
   </script>
   <!-- built files will be auto injected -->
 </body>
