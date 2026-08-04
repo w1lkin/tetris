@@ -54,6 +54,7 @@ const states = {
 
   // 游戏开始
   start: () => {
+    console.log('[tetris] start() called, cur:', store.state.cur, 'points:', store.state.points, 'max:', store.state.max)
     if (music.start) {
       music.start()
     }
@@ -124,6 +125,7 @@ const states = {
       return
     }
     if (isOver(matrix)) {
+      console.log('[tetris] GAME OVER (blocks to top), points:', store.state.points, 'max:', store.state.max)
       if (music.gameover) {
         music.gameover()
       }
@@ -190,6 +192,7 @@ const states = {
   // 游戏结束, 触发动画
   // shouldSubmit: 是否应该提交分数（页面初始化恢复状态时不提交，避免重复）
   overStart: (shouldSubmit) => {
+    console.log('[tetris] overStart() called, shouldSubmit:', shouldSubmit, 'points:', store.state.points, 'max:', store.state.max, 'cur:', !!store.state.cur, 'reset:', store.state.reset, 'lock:', store.state.lock)
     clearTimeout(states.fallInterval)
     store.commit('lock', true)
     store.commit('reset', true)
@@ -197,12 +200,17 @@ const states = {
     // 只在游戏自然结束时提交分数（页面初始化时不重复提交）
     if (shouldSubmit) {
       const finalPoints = store.state.points
-      if (finalPoints <= 0) return
+      console.log('[tetris] shouldSubmit=true, finalPoints:', finalPoints)
+      if (finalPoints <= 0) {
+        console.log('[tetris] finalPoints <= 0, skipping submit')
+        return
+      }
       // 等待 GamePlatform SDK 就绪后提交分数（fire-and-forget，和其他游戏保持一致）
       const trySubmit = (retries) => {
+        console.log('[tetris] trySubmit attempt, retries left:', retries, 'GP exists:', !!window.GamePlatform, 'submitScore exists:', !!(window.GamePlatform && typeof window.GamePlatform.submitScore === 'function'))
         if (window.GamePlatform && typeof window.GamePlatform.submitScore === 'function') {
           window.GamePlatform.submitScore('tetris', finalPoints)
-            .then(() => { console.log('[tetris] score submitted:', finalPoints) })
+            .then(() => { console.log('[tetris] score submitted OK:', finalPoints) })
             .catch((e) => { console.warn('[tetris] submitScore failed:', e && e.message) })
         } else if (retries > 0) {
           setTimeout(() => trySubmit(retries - 1), 1000)
@@ -216,19 +224,23 @@ const states = {
 
   // 游戏结束动画完成
   overEnd: () => {
+    console.log('[tetris] overEnd() called, points:', store.state.points, 'max:', store.state.max, 'cur:', !!store.state.cur)
     store.commit('matrix', blankMatrix)
     store.commit('moveBlock', { reset: true })
     store.commit('reset', false)
     store.commit('lock', false)
     store.commit('clearLines', 0)
+    console.log('[tetris] overEnd() done, points:', store.state.points, 'max:', store.state.max, 'cur:', !!store.state.cur)
   },
 
   // 写入分数
   dispatchPoints: point => {
     // 写入分数, 同时判断是否创造最高分
+    console.log('[tetris] dispatchPoints:', point, 'current max:', store.state.max)
     store.commit('points', point)
     if (point > 0 && point > store.state.max) {
       store.commit('max', point)
+      console.log('[tetris] NEW HIGH SCORE:', point)
     }
   }
 }
