@@ -127,7 +127,7 @@ const states = {
       if (music.gameover) {
         music.gameover()
       }
-      states.overStart()
+      states.overStart(true)
       return
     }
     setTimeout(() => {
@@ -188,22 +188,25 @@ const states = {
   },
 
   // 游戏结束, 触发动画
-  overStart: () => {
+  // shouldSubmit: 是否应该提交分数（页面初始化恢复状态时不提交，避免重复）
+  overStart: (shouldSubmit) => {
     clearTimeout(states.fallInterval)
     store.commit('lock', true)
     store.commit('reset', true)
     store.commit('pause', false)
-    // 提交当前局分数到天梯榜（带重试：如果 SDK 未就绪，等待最多 5 秒后重试）
-    const finalPoints = store.state.points
-    const trySubmit = (retries) => {
-      if (window._gpReady && window.GamePlatform && window.GamePlatform.getToken()) {
-        window.GamePlatform.submitScore('tetris', finalPoints).catch(() => {})
-      } else if (retries > 0) {
-        setTimeout(() => trySubmit(retries - 1), 1000)
+    // 只在游戏自然结束时提交分数（页面初始化时不重复提交）
+    if (shouldSubmit) {
+      const finalPoints = store.state.points
+      const trySubmit = (retries) => {
+        if (window._gpReady && window.GamePlatform && window.GamePlatform.getToken()) {
+          window.GamePlatform.submitScore('tetris', finalPoints).catch(() => {})
+        } else if (retries > 0) {
+          setTimeout(() => trySubmit(retries - 1), 1000)
+        }
       }
-    }
-    if (finalPoints > 0) {
-      trySubmit(5)
+      if (finalPoints > 0) {
+        trySubmit(5)
+      }
     }
   },
 
