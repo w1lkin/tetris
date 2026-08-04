@@ -10,7 +10,7 @@ const down = store => {
       key: 'r',
       once: true,
       callback: () => {
-        states.overStart()
+        states.overStart(true)
       }
     })
   } else {
