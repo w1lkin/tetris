@@ -23,7 +23,7 @@
   <style>
     .gp-home-btn { position: fixed; top: 12px; right: 12px; z-index: 99999;
       font-size: 18px; text-decoration: none; opacity: 0.35; transition: opacity 0.15s;
-      -webkit-tap-highlight-color: transparent; }
+      -webkit-tap-highlight-color: transparent; pointer-events: auto; }
     .gp-home-btn:active { opacity: 0.7; }
   </style>
   <!-- 社交平台 SDK -->
@@ -34,7 +34,10 @@
       s.src = window.__GP_API_BASE__ + '/sdk.js';
       s.onload = function () {
         window.GamePlatform.init();
-        window._gpReady = true;
+        // 硬登录门：未登录跳转门户页登录
+        window.GamePlatform.mountGate({ gameId: 'tetris' }).then(function () {
+          window._gpReady = true;
+        });
       };
       document.head.appendChild(s);
     })();
