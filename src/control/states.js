@@ -193,9 +193,9 @@ const states = {
     store.commit('lock', true)
     store.commit('reset', true)
     store.commit('pause', false)
-    // 提交分数到天梯榜
+    // 提交当前局分数到天梯榜
     if (window._gpReady && window.GamePlatform && window.GamePlatform.getToken()) {
-      window.GamePlatform.submitScore('tetris', store.state.max).catch(() => {})
+      window.GamePlatform.submitScore('tetris', store.state.points).catch(() => {})
     }
   },
 
