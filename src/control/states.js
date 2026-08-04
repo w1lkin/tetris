@@ -197,16 +197,20 @@ const states = {
     // 只在游戏自然结束时提交分数（页面初始化时不重复提交）
     if (shouldSubmit) {
       const finalPoints = store.state.points
+      if (finalPoints <= 0) return
+      // 等待 GamePlatform SDK 就绪后提交分数（fire-and-forget，和其他游戏保持一致）
       const trySubmit = (retries) => {
-        if (window._gpReady && window.GamePlatform && window.GamePlatform.getToken()) {
-          window.GamePlatform.submitScore('tetris', finalPoints).catch(() => {})
+        if (window.GamePlatform && typeof window.GamePlatform.submitScore === 'function') {
+          window.GamePlatform.submitScore('tetris', finalPoints)
+            .then(() => { console.log('[tetris] score submitted:', finalPoints) })
+            .catch((e) => { console.warn('[tetris] submitScore failed:', e && e.message) })
         } else if (retries > 0) {
           setTimeout(() => trySubmit(retries - 1), 1000)
+        } else {
+          console.warn('[tetris] GamePlatform SDK not available after retries, score not submitted:', finalPoints)
         }
       }
-      if (finalPoints > 0) {
-        trySubmit(5)
-      }
+      trySubmit(5)
     }
   },
 
