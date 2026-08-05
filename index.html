@@ -10,6 +10,13 @@
     <meta charset="UTF-8">
   <title>俄罗斯方块</title>
   <link rel="stylesheet" href="static/loader.css">
+  <style>
+    .gp-home-btn, .gp-lb-btn { position: fixed; z-index: 50;
+      font-size: 18px; text-decoration: none; opacity: 0.35; transition: opacity 0.15s; }
+    .gp-home-btn:active, .gp-lb-btn:active { opacity: 0.7; }
+    .gp-home-btn { top: 12px; right: 12px; }
+    .gp-lb-btn { top: 12px; right: 44px; }
+  </style>
 </head>
 
 <body>
@@ -20,6 +27,7 @@
     </div>
   </div>
   <a href="https://game-list-arv.pages.dev" class="gp-home-btn" title="主页">🏠</a>
+  <a href="https://game-list-arv.pages.dev?tab=leaderboard&game=tetris" class="gp-lb-btn" title="天梯榜">🏆</a>
   <!-- 社交平台 SDK（同步加载，确保 GamePlatform 在游戏逻辑前就绪）-->
   <script>
     window.__GP_API_BASE__ = new URLSearchParams(location.search).get('api') || 'https://api.w1lkin.site';
