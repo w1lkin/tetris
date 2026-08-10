@@ -55,5 +55,5 @@ tetris/
 
 ## 部署
 
-暂未发布到 Cloudflare Pages。
+已部署至 Cloudflare Pages：`tetris-t83.pages.dev`
 

@@ -8,7 +8,7 @@
 - **音频**：Web Audio API，单音效文件多源播放
 - **i18n**：见 `src/i18n.json`
 - **数据本地**：通过 `store.subscribe` 持久化所有 state 到 `localStorage`，断电/刷新可继续
-- **当前分支**：`release/1.0.0`（暂未发布到 Cloudflare Pages）
+- **部署域名**：`https://tetris-t83.pages.dev/`
 
 ## 本地开发
 
