@@ -57,7 +57,3 @@ tetris/
 
 暂未发布到 Cloudflare Pages。
 
-## 版本
-
-- **v1.0.0** — 初始发布：Vue 2 俄罗斯方块、Web Audio API、天梯榜接入
-- **v2.0.0** — 完善项目文档（AGENTS.md / README.md）
